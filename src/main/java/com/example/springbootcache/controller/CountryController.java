@@ -1,5 +1,7 @@
-package com.example.springbootcache;
+package com.example.springbootcache.controller;
 
+import com.example.springbootcache.model.CountryEntity;
+import com.example.springbootcache.servise.CountryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -11,9 +13,9 @@ import java.util.List;
 public class CountryController {
     private final CountryService service;
 
-    @GetMapping("/all")
-    public List<CountryEntity> getCountries(){
-        return service.getCountries();
+    @GetMapping("/{id}")
+    public CountryEntity getCountry(@PathVariable Long id){
+        return service.getCountry(id);
     }
 
     @PostMapping

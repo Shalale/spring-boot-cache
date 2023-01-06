@@ -1,6 +1,9 @@
-package com.example.springbootcache;
+package com.example.springbootcache.servise;
 
+import com.example.springbootcache.model.CountryEntity;
+import com.example.springbootcache.repository.CountryRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
@@ -15,25 +18,26 @@ import java.util.List;
 public class CountryService {
     private final CountryRepository repository;
 
-    @Cacheable
-    public List<CountryEntity> getCountries() {
-        return repository.findAll();
+    @SneakyThrows
+    @Cacheable(cacheNames = "country")
+    public CountryEntity getCountry(Long id) {
+        Thread.sleep(3000);
+        return repository.findById(id).orElseThrow();
     }
 
     public void addCountry(CountryEntity country) {
         repository.save(country);
     }
 
-    @CachePut
+    @CachePut(cacheNames = "country", key = "#id")
     public void updateCountry(Long id, CountryEntity country) {
         CountryEntity last = repository.getReferenceById(id);
         last.setPopulation(country.getPopulation());
         repository.save(country);
     }
 
-    @CacheEvict
+    @CacheEvict(cacheNames = "country", allEntries = true)
     public void cacheEvict(){
-
     }
 
 
